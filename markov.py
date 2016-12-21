@@ -54,7 +54,7 @@ def random_markov_text(markov_dict, length):
     text_list = list(random_prefix(markov_dict))
     prefix_length = len(text_list)
 
-    while length - len(text_list) > 0:
+    while len(text_list) < length:
 
         prefix = tuple(text_list[-prefix_length:])
 
