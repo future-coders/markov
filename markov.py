@@ -39,19 +39,19 @@ def markov_analysis(text, prefix_length):
 
         result[prefix].append(suffix)
     
-    for prefix, suffixes in result.items():
-        print("{} -> {}".format(prefix, suffixes))
+    # for prefix, suffixes in result.items():
+    #     print("{} -> {}".format(prefix, suffixes))
 
     return dict(result)
 
 
-def random_prefix_list(markov_dict):
-    return list(random.choice(list(markov_dict.keys())))
+def random_prefix(markov_dict):
+    return random.choice(list(markov_dict.keys()))
 
 
 def random_markov_text(markov_dict, length):
 
-    text_list = random_prefix_list(markov_dict)
+    text_list = list(random_prefix(markov_dict))
     prefix_length = len(text_list)
 
     while length - len(text_list) > 0:
@@ -59,12 +59,15 @@ def random_markov_text(markov_dict, length):
         prefix = tuple(text_list[-prefix_length:])
 
         if not prefix in markov_dict:
-            text_list.append(".\n\n") 
-            prefix = random_prefix_list(markov_dict)
-        
+            text_list.append(".")
+            prefix = random_prefix(markov_dict)
+            text_list.extend(list(prefix))
+                    
         suffixes = markov_dict[prefix]
         next_word = random.choice(suffixes)
         text_list.append(next_word)
+
+    text_list.append(".")
 
     return " ".join(text_list)
 
@@ -74,7 +77,7 @@ if __name__ == "__main__":
     with open('./emma.txt', 'r') as file:
         text = file.read()
         
-    markov_dict = markov_analysis(text, 5)
-    random_text = random_markov_text(markov_dict, 10000)
+    markov_dict = markov_analysis(text, 2)
+    random_text = random_markov_text(markov_dict, 1000)
 
     print(random_text)
